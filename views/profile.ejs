@@ -12,7 +12,7 @@
 
 <p>Update Info:</p>
 
-<form action="/profile?_method=PUT" method="POST">
+<form action="/profile?_method=PUT" method="POST" enctype="multipart/form-data">
 	<div>
 		<label for="username">Username:</label>
 		<input type="text" id="username" name="username" placeholder="username" value="<%= currentUser.username %>" autofocus required>
