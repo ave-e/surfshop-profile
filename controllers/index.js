@@ -17,23 +17,31 @@ module.exports = {
 		res.render('register', { title: 'Register', username: '', email: '' });
 	},
 	// POST /register
-	async postRegister(req, res, next) {
-		try {
-			const user = await User.register(new User(req.body), req.body.password);
-			req.login(user, function(err) {
-				if (err) return next(err);
-				req.session.success = `Welcome to Surf Shop, ${user.username}!`;
-				res.redirect('/');
-			});
-		} catch(err) {
-			const { username, email } = req.body;
-			let error = err.message;
-			if (error.includes('duplicate') && error.includes('index: email_1 dup key')) {
-				error = 'A user with the given email is already registered';
+async postRegister(req, res, next) {
+	try {
+		if (req.file) {
+			const { secure_url, public_id } = req.file;
+			req.body.image = {
+				secure_url,
+				public_id
 			}
-			res.render('register', { title: 'Register', username, email, error });
 		}
-	},
+		const user = await User.register(new User(req.body), req.body.password);
+		req.login(user, function(err) {
+			if (err) return next(err);
+			req.session.success = `Welcome to Surf Shop, ${user.username}!`;
+			res.redirect('/');
+		});
+	} catch(err) {
+		deleteProfileImage(req);
+		const { username, email } = req.body;
+		let error = err.message;
+		if (error.includes('duplicate') && error.includes('index: email_1 dup key')) {
+			error = 'A user with the given email is already registered';
+		}
+		res.render('register', { title: 'Register', username, email, error });
+	}
+},
 	// GET /login
 	getLogin(req, res, next) {
 		if (req.isAuthenticated()) return res.redirect('/');
