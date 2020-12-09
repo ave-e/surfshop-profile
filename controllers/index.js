@@ -3,6 +3,8 @@ const Post = require('../models/post');
 const passport = require('passport');
 const mapBoxToken = process.env.MAPBOX_TOKEN;
 const util = require('util');
+const { cloudinary } = require('../cloudinary');
+const { deleteProfileImage } = require('../middleware');
 
 module.exports = {
 	// GET /
