@@ -4,7 +4,7 @@ const Review = require('../models/review');
 const User = require('../models/user');
 const Post = require('../models/post');
 
-module.exports = {
+const middleware = {
 	asyncErrorHandler: (fn) =>
 		(req, res, next) => {
 			Promise.resolve(fn(req, res, next))
@@ -67,6 +67,8 @@ module.exports = {
 		}
 	}
 }
+
+module.exports = middleware;
 
 
 
