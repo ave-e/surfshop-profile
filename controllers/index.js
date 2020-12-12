@@ -20,10 +20,10 @@ module.exports = {
 async postRegister(req, res, next) {
 	try {
 		if (req.file) {
-			const { secure_url, public_id } = req.file;
+			const { path, filename } = req.file;
 			req.body.image = {
-				secure_url,
-				public_id
+				path,
+				filename
 			}
 		}
 		const user = await User.register(new User(req.body), req.body.password);
