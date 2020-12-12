@@ -79,7 +79,7 @@ async postRegister(req, res, next) {
 	if (username) user.username = username;
 	if (email) user.email = email;
 	if (req.file) {
-		if (user.image.path) await cloudinary.uploader.destroy(user.image.path);
+		if (user.image.filename) await cloudinary.uploader.destroy(user.image.filename);
 		const { path, filename } = req.file;
 		user.image = { path, filename };
 	}
