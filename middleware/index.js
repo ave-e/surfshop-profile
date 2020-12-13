@@ -56,23 +56,23 @@ changePassword: async (req, res, next) => {
 		req.session.error = 'Missing password confirmation!';
 		return res.redirect('/profile');
 	} else if (newPassword && passwordConfirmation) {
-		const { user } = res.locals;
-		if (newPassword === passwordConfirmation) {
-			await user.setPassword(newPassword);
-			next();
+			const { user } = res.locals;
+			if (newPassword === passwordConfirmation) {
+				await user.setPassword(newPassword);
+				next();
+			} else {
+				middleware.deleteProfileImage(req);
+				req.session.error = 'New passwords must match!';
+				return res.redirect('/profile');
+			}
 		} else {
-			middleware.deleteProfileImage(req);
-			req.session.error = 'New passwords must match!';
-			return res.redirect('/profile');
+			next();
 		}
-	} else {
-		next();
+	},
+	deleteProfileImage: async (req) => {
+		if (req.file) await cloudinary.uploader.destroy(req.file.filename);
 	}
-},
-deleteProfileImage: async (req) => {
-	if (req.file) await cloudinary.uploader.destroy(req.file.filename);
 }
-
 module.exports = middleware;
 
 
