@@ -73,7 +73,8 @@ changePassword: async (req, res, next) => {
 		if (req.file) await cloudinary.uploader.destroy(req.file.filename);
 	
 }
-
+}
+		
 module.exports = middleware;
 
 
